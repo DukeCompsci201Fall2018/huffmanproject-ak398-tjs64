@@ -68,7 +68,7 @@ public class HuffProcessor {
 	 * @param in
 	 * @return
 	 */
-	public int[] readForCounts(BitInputStream in) {
+	private int[] readForCounts(BitInputStream in) {
 		int[] freq = new int[ALPH_SIZE +1];
 		freq[PSEUDO_EOF] = 1;
 		
@@ -88,7 +88,7 @@ public class HuffProcessor {
 	 * @param counts
 	 * @return
 	 */
-	public HuffNode makeTreeFromCounts(int[] counts) {
+	private HuffNode makeTreeFromCounts(int[] counts) {
 		PriorityQueue<HuffNode> pq = new PriorityQueue<>();
 		
 		for (int k=0; k < counts.length; k += 1) {
@@ -113,7 +113,7 @@ public class HuffProcessor {
 	 * @param root
 	 * @return
 	 */
-	public String[] makeCodingsFromTree(HuffNode root) {
+	private String[] makeCodingsFromTree(HuffNode root) {
 		String[] codings = new String[ALPH_SIZE +1];
 		doPaths(codings,root,"");
 		return codings;
@@ -143,7 +143,7 @@ public class HuffProcessor {
 	 * @param root
 	 * @param out
 	 */
-	public void writeHeader(HuffNode root, BitOutputStream out) {
+	private void writeHeader(HuffNode root, BitOutputStream out) {
 		if (root.myLeft != null || root.myRight != null) {
 			out.writeBits(1, 0);
 			writeHeader(root.myLeft, out);
@@ -165,7 +165,7 @@ public class HuffProcessor {
 	 * @param in
 	 * @param out
 	 */
-	public void writeCompressedBits(String[] codings, BitInputStream in, BitOutputStream out) {
+	private void writeCompressedBits(String[] codings, BitInputStream in, BitOutputStream out) {
 		while (true) {
 			int val = in.readBits(BITS_PER_WORD);
 			if (val == -1) break;
@@ -211,7 +211,7 @@ public class HuffProcessor {
 	 * 			  Buffered bit stream of the file to be decompressed
 	 * @return a HuffNode that is the root of the tree written during compression
 	 */
-	public HuffNode readTreeHeader(BitInputStream in) {
+	private HuffNode readTreeHeader(BitInputStream in) {
 		int bit = in.readBits(1);
 		if (bit == -1)
 			throw new HuffException("bad input, no PSEUDO_EOF");
@@ -237,7 +237,7 @@ public class HuffProcessor {
 	 * @param out
 	 * 			  Buffered bit stream writing to the output file
 	 */
-	public void readCompressedBits(HuffNode root, BitInputStream in, BitOutputStream out) {
+	private void readCompressedBits(HuffNode root, BitInputStream in, BitOutputStream out) {
 		HuffNode current = root;
 		while (true) {
 			int bits = in.readBits(1);
