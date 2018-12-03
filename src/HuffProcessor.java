@@ -100,7 +100,7 @@ public class HuffProcessor {
 		while (pq.size() > 1) {
 			HuffNode left = pq.remove();
 			HuffNode right = pq.remove();
-			HuffNode t = new HuffNode(left.myWeight + right.myWeight,left.myWeight + right.myWeight,left,right);
+			HuffNode t = new HuffNode(0,left.myWeight + right.myWeight,left,right);
 			pq.add(t);
 		}
 		HuffNode root = pq.remove();
@@ -144,7 +144,17 @@ public class HuffProcessor {
 	 * @param out
 	 */
 	public void writeHeader(HuffNode root, BitOutputStream out) {
-		
+		if (root.myLeft != null || root.myRight != null) {
+			out.writeBits(1, 0);
+			writeHeader(root.myLeft, out);
+			writeHeader(root.myRight, out);
+		}
+		else if (root.myLeft == null && root.myRight == null) {
+			out.writeBits(1, 1);
+			out.writeBits(BITS_PER_WORD + 1, root.myValue);
+			return;
+		}
+		return;
 	}
 	
 	/**
@@ -156,7 +166,14 @@ public class HuffProcessor {
 	 * @param out
 	 */
 	public void writeCompressedBits(String[] codings, BitInputStream in, BitOutputStream out) {
-		
+		while (true) {
+			int val = in.readBits(BITS_PER_WORD);
+			if (val == -1) break;
+			String code = codings[val];
+			out.writeBits(code.length(), Integer.parseInt(code,2));
+			String pseudoCode = codings[PSEUDO_EOF];
+			out.writeBits(pseudoCode.length(), Integer.parseInt(pseudoCode,2));
+		}
 	}
 	
 	
