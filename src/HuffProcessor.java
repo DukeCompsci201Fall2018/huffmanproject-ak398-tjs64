@@ -68,7 +68,16 @@ public class HuffProcessor {
 	 * @return
 	 */
 	public int[] readForCounts(BitInputStream in) {
-		return null;
+		int[] freq = new int[ALPH_SIZE +1];
+		freq[PSEUDO_EOF] = 1;
+		
+		while(true) {
+			int val = in.readBits(BITS_PER_WORD);
+			if (val == -1) break;
+			freq[val] += 1;
+		}
+		
+		return freq;
 	}
 	
 	/**
@@ -79,6 +88,7 @@ public class HuffProcessor {
 	 * @return
 	 */
 	public HuffNode makeTreeFromCounts(int[] counts) {
+		
 		return null;
 	}
 	
@@ -89,6 +99,7 @@ public class HuffProcessor {
 	 * @return
 	 */
 	public String[] makeCodingsFromTree(HuffNode root) {
+		
 		return null;
 	}
 	
