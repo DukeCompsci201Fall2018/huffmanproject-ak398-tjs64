@@ -114,8 +114,26 @@ public class HuffProcessor {
 	 * @return
 	 */
 	public String[] makeCodingsFromTree(HuffNode root) {
-		
-		return null;
+		String[] codings = new String[ALPH_SIZE +1];
+		doPaths(codings,root,"");
+		return codings;
+	}
+	
+	/**
+	 * Recursive helper method for makeCodingsFromTree method.
+	 * 
+	 * @param codings
+	 * @param root
+	 * @param path
+	 */
+	private void doPaths(String[] codings, HuffNode root, String path) {
+		if (root == null) return;
+		if (root.myLeft == null && root.myRight == null) {
+			codings[root.myValue]= path;
+			return;
+		}
+		doPaths(codings,root.myLeft,path+"0");
+		doPaths(codings,root.myRight,path+"1");
 	}
 	
 	/**
