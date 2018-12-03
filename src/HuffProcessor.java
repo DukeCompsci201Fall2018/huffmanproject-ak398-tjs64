@@ -60,22 +60,57 @@ public class HuffProcessor {
 //		out.close();
 	}
 	
+	/**
+	 * Determine the frequency of every 8-bit character/chunk in the file
+	 * being compressed.
+	 * 
+	 * @param in
+	 * @return
+	 */
 	public int[] readForCounts(BitInputStream in) {
 		return null;
 	}
 	
+	/**
+	 * From the frequencies, create the Huffman trie/tree used to create 
+	 * encodings.
+	 * 
+	 * @param counts
+	 * @return
+	 */
 	public HuffNode makeTreeFromCounts(int[] counts) {
 		return null;
 	}
 	
+	/**
+	 * From the trie/tree, create the encodings for each 8-bit character.
+	 * 
+	 * @param root
+	 * @return
+	 */
 	public String[] makeCodingsFromTree(HuffNode root) {
 		return null;
 	}
 	
+	/**
+	 * Write magic number and the tree to the beginning/header of the
+	 * compressed file.
+	 * 
+	 * @param root
+	 * @param out
+	 */
 	public void writeHeader(HuffNode root, BitOutputStream out) {
 		
 	}
 	
+	/**
+	 * Write the encoding for each 8-bit chunk, followed by the encoding
+	 * for PSEUDO_EOF.
+	 * 
+	 * @param codings
+	 * @param in
+	 * @param out
+	 */
 	public void writeCompressedBits(String[] codings, BitInputStream in, BitOutputStream out) {
 		
 	}
