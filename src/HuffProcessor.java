@@ -171,9 +171,9 @@ public class HuffProcessor {
 			if (val == -1) break;
 			String code = codings[val];
 			out.writeBits(code.length(), Integer.parseInt(code,2));
-			String pseudoCode = codings[PSEUDO_EOF];
-			out.writeBits(pseudoCode.length(), Integer.parseInt(pseudoCode,2));
 		}
+		String pseudoCode = codings[PSEUDO_EOF];
+		out.writeBits(pseudoCode.length(), Integer.parseInt(pseudoCode,2));
 	}
 	
 	
