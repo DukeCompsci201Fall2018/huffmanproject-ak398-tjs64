@@ -41,14 +41,46 @@ public class HuffProcessor {
 	 *            Buffered bit stream writing to the output file.
 	 */
 	public void compress(BitInputStream in, BitOutputStream out){
-
-		while (true){
-			int val = in.readBits(BITS_PER_WORD);
-			if (val == -1) break;
-			out.writeBits(BITS_PER_WORD, val);
-		}
+		int[] counts = readForCounts(in);
+		HuffNode root = makeTreeFromCounts(counts);
+		String[] codings = makeCodingsFromTree(root);
+		
+		out.writeBits(BITS_PER_INT, HUFF_TREE);
+		writeHeader(root,out);
+		
+		in.reset();
+		writeCompressedBits(codings,in,out);
 		out.close();
+
+//		while (true){
+//			int val = in.readBits(BITS_PER_WORD);
+//			if (val == -1) break;
+//			out.writeBits(BITS_PER_WORD, val);
+//		}
+//		out.close();
 	}
+	
+	public int[] readForCounts(BitInputStream in) {
+		return null;
+	}
+	
+	public HuffNode makeTreeFromCounts(int[] counts) {
+		return null;
+	}
+	
+	public String[] makeCodingsFromTree(HuffNode root) {
+		return null;
+	}
+	
+	public void writeHeader(HuffNode root, BitOutputStream out) {
+		
+	}
+	
+	public void writeCompressedBits(String[] codings, BitInputStream in, BitOutputStream out) {
+		
+	}
+	
+	
 	/**
 	 * Decompresses a file. Output file must be identical bit-by-bit to the
 	 * original.
@@ -76,7 +108,13 @@ public class HuffProcessor {
 //		out.close();
 	}
 	
-	// read the tree used to decompress (the tree written during compression)
+	/**
+	 * Read the tree used to decompress (this is the tree written during compression).
+	 * 
+	 * @param in
+	 * 			  Buffered bit stream of the file to be decompressed
+	 * @return a HuffNode that is the root of the tree written during compression
+	 */
 	public HuffNode readTreeHeader(BitInputStream in) {
 		int bit = in.readBits(1);
 		if (bit == -1)
@@ -92,8 +130,17 @@ public class HuffProcessor {
 		}
 	}
 	
-	// read the bits from the compressed file and use them to traverse root-to-leaf
-	// paths, writing leaf values to the output file. Stop when finding PSEUDO_EOF.
+	/**
+	 * Read the bits from the compressed file and use them to traverse root-to-leaf
+	 * paths, writing leaf values to the output file. Stop when finding PSEUDO_EOF.
+	 * 
+	 * @param root
+	 * 			  HuffNode root of the tree that is being read
+	 * @param in
+	 * 			  Buffered bit stream of the file to be decompressed
+	 * @param out
+	 * 			  Buffered bit stream writing to the output file
+	 */
 	public void readCompressedBits(HuffNode root, BitInputStream in, BitOutputStream out) {
 		HuffNode current = root;
 		while (true) {
