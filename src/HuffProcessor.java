@@ -71,11 +71,17 @@ public class HuffProcessor {
 	private int[] readForCounts(BitInputStream in) {
 		int[] freq = new int[ALPH_SIZE +1];
 		freq[PSEUDO_EOF] = 1;
+		if(myDebugLevel >= DEBUG_HIGH) {
+			System.out.printf("chunk	freq\n");
+		}
 		
 		while(true) {
 			int val = in.readBits(BITS_PER_WORD);
 			if (val == -1) break;
 			freq[val] += 1;
+			if(myDebugLevel >= DEBUG_HIGH) {
+				System.out.printf( "%d	%d\n", val,freq[val]);
+			}
 		}
 		
 		return freq;
@@ -104,6 +110,12 @@ public class HuffProcessor {
 			pq.add(t);
 		}
 		HuffNode root = pq.remove();
+		
+		// Debugging for size of priority queue constructed
+		if(myDebugLevel >= DEBUG_LOW){
+			System.out.printf("pq created with %d nodes\n", pq.size());
+		}
+		
 		return root;
 	}
 	
@@ -130,6 +142,10 @@ public class HuffProcessor {
 		if (root == null) return;
 		if (root.myLeft == null && root.myRight == null) {
 			codings[root.myValue]= path;
+			// Debugging that lists every root-to-leaf path found
+			if(myDebugLevel >= DEBUG_HIGH) {
+				System.out.printf("encoding for %d is %s\n", root.myValue,path);
+			}
 			return;
 		}
 		doPaths(codings,root.myLeft,path+"0");
